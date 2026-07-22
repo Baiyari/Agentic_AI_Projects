@@ -19,4 +19,4 @@ An Agentic AI workflow that automates payment reminders using Zapier Agents, Goo
 - Google Gemini AI
 
 ## Zapier Agent Template
-[Click here to use the agent](PASTE_YOUR_TEMPLATE_LINK_HERE)
+[Click here to use the agent](https://agents.zapier.com/copy/f47170da-0492-4b62-9f37-bc28a983a396)
