@@ -1,0 +1,155 @@
+{
+  "name": "MAS_AgenticAI",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -320,
+        -272
+      ],
+      "id": "98e8f9de-55a2-479f-bc68-b1836c060877",
+      "name": "When chat message received",
+      "webhookId": "27940ce7-c35f-4d5a-9fdb-03d3c746fef4"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are an information collection agent; collect all the relevant information from web searches in a comprehensive way. Try to find the maximum possible information about the user query. You should focus on major keywords to collect large sets of information from the web."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -96,
+        -272
+      ],
+      "id": "7d7e555c-b574-46f9-96e4-44d3797581cc",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "@tavily/n8n-nodes-tavily.tavilyTool",
+      "typeVersion": 1,
+      "position": [
+        48,
+        -48
+      ],
+      "id": "a25bd488-63e3-4d1d-9f3e-1642a1f54c74",
+      "name": "Search in Tavily",
+      "credentials": {
+        "tavilyApi": {
+          "id": "clPe1Jww9F7ELyXg",
+          "name": "Tavily account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        -48
+      ],
+      "id": "5838fe44-eee3-42b7-9fd5-5acf2dd44b4f",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "QqU4VP84CRGkKjIs",
+          "name": "Ollama account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.output }}",
+        "options": {
+          "systemMessage": "You are the final-level agent; give the output on the user query. You can generate a sentiment result, summary, or conclusive result to support the user's question. To generate a result/summary/conclusion. You can use the output of the connected tool."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        256,
+        -272
+      ],
+      "id": "9862ecd6-fcde-4f36-91a8-df4a309ffe97",
+      "name": "AI Agent1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search in Tavily": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "0f5ba427-8acc-41ae-ae19-9a7a868afc6b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "050eb919a4abe1da2c8d5ad47590fda2a6477386c92111823cf3a4dd84d9ed77"
+  },
+  "id": "Cl73OhrSAnSOXG4u",
+  "tags": []
+}
